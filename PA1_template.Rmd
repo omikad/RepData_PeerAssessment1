@@ -7,7 +7,7 @@ output:
 
 
 ## Loading and preprocessing the data
-```{r loading, echo=TRUE, fig.path='figure/'}
+```{r chunk1.loading, echo=TRUE, fig.path='figure/'}
 library(dplyr)
 library(ggplot2)
 
@@ -18,7 +18,7 @@ dataset$date <- as.Date(dataset$date, "%Y-%m-%d")
 
 ## What is mean total number of steps taken per day?
 Create function to show plot with mean and median, because we need to repeat it later
-```{r mean.per.day, echo=TRUE, result='asis', fig.path='figure/'}
+```{r chunk2.mean.per.day, echo=TRUE, result='asis', fig.path='figure/'}
 showMeanMedianByDate <- function (showme) {
   # Group data by date and summarize it by taking sum of steps
   showme.bydate = showme %>% 
@@ -43,7 +43,7 @@ showMeanMedianByDate(dataset)
 
 
 ## What is the average daily activity pattern?
-```{r daily.activity, echo=TRUE, result='asis', fig.path='figure/'}
+```{r chunk3.daily.activity, echo=TRUE, result='asis', fig.path='figure/'}
 days.count <- length(unique(dataset$date))
 
 dataset.bytime <- dataset %>%
@@ -68,7 +68,7 @@ cat(paste(
 
 
 ## Imputing missing values
-```{r imputing, echo=TRUE, fig.path='figure/'}
+```{r chunk4.imputing, echo=TRUE, fig.path='figure/'}
 print(paste(
   "Total number of missing values in the dataset:",
   sum(!complete.cases(dataset))
@@ -94,7 +94,7 @@ our mean value of number of steps is unchanged. In original dataset each number 
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
-```{r weekends.activity, echo=TRUE, fig.path='figure/'}
+```{r chunk5.weekends.activity, echo=TRUE, fig.path='figure/'}
 dataset.fixed$week <- weekdays(dataset.fixed$date) %in% c("Saturday", "Sunday")
 dataset.fixed$week <- factor(dataset.fixed$week, labels=c("weekday","weekend"))
 

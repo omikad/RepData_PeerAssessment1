@@ -68,7 +68,7 @@ showMeanMedianByDate <- function (showme) {
 showMeanMedianByDate(dataset)
 ```
 
-![](figure/mean.per.day-1.png)
+![](figure/chunk2.mean.per.day-1.png)
 
 ```
 ## Mean and median of the total number of steps taken per day: 10766.1886792453 and 10765
@@ -95,7 +95,7 @@ with(dataset.bytime, plot(
   ylab="Average steps"))
 ```
 
-![](figure/daily.activity-1.png)
+![](figure/chunk3.daily.activity-1.png)
 
 ```r
 cat(paste(
@@ -137,7 +137,7 @@ dataset.fixed <- merge(dataset, dataset.bytime, by="interval") %>%
 showMeanMedianByDate(dataset.fixed)
 ```
 
-![](figure/imputing-1.png)
+![](figure/chunk4.imputing-1.png)
 
 ```
 ## Mean and median of the total number of steps taken per day: 10766.1886792453 and 10766.1886792453
@@ -167,4 +167,4 @@ print(ggplot(dataset.week, aes(interval, steps)) +
       facet_wrap(~week, ncol=1))
 ```
 
-![](figure/weekends.activity-1.png)
+![](figure/chunk5.weekends.activity-1.png)
