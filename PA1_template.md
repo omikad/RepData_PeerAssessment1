@@ -43,7 +43,7 @@ dataset$date <- as.Date(dataset$date, "%Y-%m-%d")
 
 
 ## What is mean total number of steps taken per day?
-Create function to show plot with mean and median, because we need to repeat it later
+Create function to show plot with mean and median, because we need to call it again later
 
 ```r
 showMeanMedianByDate <- function (showme) {
@@ -78,10 +78,8 @@ showMeanMedianByDate(dataset)
 ## What is the average daily activity pattern?
 
 ```r
-days.count <- length(unique(dataset$date))
-
+# Group data by interval and summarize it by using mean of steps
 dataset.bytime <- dataset %>%
-  # Group data by interval and summarize it by using mean of steps
   filter(!is.na(steps)) %>%
   group_by(interval) %>%
   summarize(steps = mean(steps))
@@ -123,9 +121,9 @@ print(paste(
 ```
 
 ```r
-# NA values are only in dataset steps column
-# Fill all missing values using mean for that 5-minute interval
-# dataset.bytime contains averaged (by interval) number of steps
+# NA values are only in dataset steps column.
+# I will fill all missing values using mean for that 5-minute interval
+# Table dataset.bytime contains averaged (by interval) number of steps
 # So we need to merge these two tables together (by interval column)
 # And fix steps column by replacing NA values to corresponding average
 dataset.fixed <- merge(dataset, dataset.bytime, by="interval") %>%
@@ -159,7 +157,8 @@ dataset.week <- dataset.fixed %>%
   group_by(interval, week) %>%
   summarize(steps = mean(steps))
 
-# Because we grouped data by week column (weekend or weekday) we will get 2 plots
+# I will draw plots by using facets on column week
+# Because column week has 2 factors (weekend and weekday) we will get two plots
 # Draw each plot as line by using interval and steps values
 print(ggplot(dataset.week, aes(interval, steps)) + 
       geom_line() + 

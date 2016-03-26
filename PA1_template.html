@@ -131,7 +131,7 @@ dataset$date &lt;- as.Date(dataset$date, &quot;%Y-%m-%d&quot;)</code></pre>
 </div>
 <div id="what-is-mean-total-number-of-steps-taken-per-day" class="section level2">
 <h2>What is mean total number of steps taken per day?</h2>
-<p>Create function to show plot with mean and median, because we need to repeat it later</p>
+<p>Create function to show plot with mean and median, because we need to call it again later</p>
 <pre class="r"><code>showMeanMedianByDate &lt;- function (showme) {
   # Group data by date and summarize it by taking sum of steps
   showme.bydate = showme %&gt;% 
@@ -157,10 +157,8 @@ showMeanMedianByDate(dataset)</code></pre>
 </div>
 <div id="what-is-the-average-daily-activity-pattern" class="section level2">
 <h2>What is the average daily activity pattern?</h2>
-<pre class="r"><code>days.count &lt;- length(unique(dataset$date))
-
+<pre class="r"><code># Group data by interval and summarize it by using mean of steps
 dataset.bytime &lt;- dataset %&gt;%
-  # Group data by interval and summarize it by using mean of steps
   filter(!is.na(steps)) %&gt;%
   group_by(interval) %&gt;%
   summarize(steps = mean(steps))
@@ -186,9 +184,9 @@ with(dataset.bytime, plot(
   sum(!complete.cases(dataset))
 ))</code></pre>
 <pre><code>## [1] &quot;Total number of missing values in the dataset: 2304&quot;</code></pre>
-<pre class="r"><code># NA values are only in dataset steps column
-# Fill all missing values using mean for that 5-minute interval
-# dataset.bytime contains averaged (by interval) number of steps
+<pre class="r"><code># NA values are only in dataset steps column.
+# I will fill all missing values using mean for that 5-minute interval
+# Table dataset.bytime contains averaged (by interval) number of steps
 # So we need to merge these two tables together (by interval column)
 # And fix steps column by replacing NA values to corresponding average
 dataset.fixed &lt;- merge(dataset, dataset.bytime, by=&quot;interval&quot;) %&gt;%
@@ -212,7 +210,8 @@ dataset.week &lt;- dataset.fixed %&gt;%
   group_by(interval, week) %&gt;%
   summarize(steps = mean(steps))
 
-# Because we grouped data by week column (weekend or weekday) we will get 2 plots
+# I will draw plots by using facets on column week
+# Because column week has 2 factors (weekend and weekday) we will get two plots
 # Draw each plot as line by using interval and steps values
 print(ggplot(dataset.week, aes(interval, steps)) + 
       geom_line() + 
