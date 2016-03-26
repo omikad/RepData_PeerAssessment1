@@ -1,16 +1,42 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
----
+# Reproducible Research: Peer Assessment 1
 
 
 ## Loading and preprocessing the data
-```{r loading, echo=TRUE, fig.path='figure/'}
-library(dplyr)
-library(ggplot2)
 
+```r
+library(dplyr)
+```
+
+```
+## Warning: package 'dplyr' was built under R version 3.2.3
+```
+
+```
+## 
+## Attaching package: 'dplyr'
+```
+
+```
+## The following objects are masked from 'package:stats':
+## 
+##     filter, lag
+```
+
+```
+## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union
+```
+
+```r
+library(ggplot2)
+```
+
+```
+## Warning: package 'ggplot2' was built under R version 3.2.3
+```
+
+```r
 dataset <- read.csv(unz("activity.zip", "activity.csv"))
 dataset$date <- as.Date(dataset$date, "%Y-%m-%d")
 ```
@@ -18,7 +44,8 @@ dataset$date <- as.Date(dataset$date, "%Y-%m-%d")
 
 ## What is mean total number of steps taken per day?
 Create function to show plot with mean and median, because we need to repeat it later
-```{r mean.per.day, echo=TRUE, result='asis', fig.path='figure/'}
+
+```r
 showMeanMedianByDate <- function (showme) {
   # Group data by date and summarize it by taking sum of steps
   showme.bydate = showme %>% 
@@ -41,9 +68,16 @@ showMeanMedianByDate <- function (showme) {
 showMeanMedianByDate(dataset)
 ```
 
+![](figure/mean.per.day-1.png)
+
+```
+## Mean and median of the total number of steps taken per day: 10766.1886792453 and 10765
+```
+
 
 ## What is the average daily activity pattern?
-```{r daily.activity, echo=TRUE, result='asis', fig.path='figure/'}
+
+```r
 days.count <- length(unique(dataset$date))
 
 dataset.bytime <- dataset %>%
@@ -59,21 +93,36 @@ with(dataset.bytime, plot(
   main="Average number of steps taken of 5-minute interval",
   xlab="Interval",
   ylab="Average steps"))
+```
 
+![](figure/daily.activity-1.png)
+
+```r
 cat(paste(
   "5-minute interval, on average across all the days in the dataset,",
   "contains the maximum number of steps:",
   dataset.bytime[which.max(dataset.bytime$steps),]$interval))
 ```
 
+```
+## 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps: 835
+```
+
 
 ## Imputing missing values
-```{r imputing, echo=TRUE, fig.path='figure/'}
+
+```r
 print(paste(
   "Total number of missing values in the dataset:",
   sum(!complete.cases(dataset))
 ))
+```
 
+```
+## [1] "Total number of missing values in the dataset: 2304"
+```
+
+```r
 # NA values are only in dataset steps column
 # Fill all missing values using mean for that 5-minute interval
 # dataset.bytime contains averaged (by interval) number of steps
@@ -88,13 +137,20 @@ dataset.fixed <- merge(dataset, dataset.bytime, by="interval") %>%
 showMeanMedianByDate(dataset.fixed)
 ```
 
+![](figure/imputing-1.png)
+
+```
+## Mean and median of the total number of steps taken per day: 10766.1886792453 and 10766.1886792453
+```
+
 
 Because we fixed NA values of steps by using average number of steps in the particular interval,
 our mean value of number of steps is unchanged. In original dataset each number of steps is integer value, and median value for original dataset is integer too. But, in fixed dataset, we now have a lot of floating point values, so our median is now equal to mean.
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
-```{r weekends.activity, echo=TRUE, fig.path='figure/'}
+
+```r
 dataset.fixed$week <- weekdays(dataset.fixed$date) %in% c("Saturday", "Sunday")
 dataset.fixed$week <- factor(dataset.fixed$week, labels=c("weekday","weekend"))
 
@@ -110,3 +166,5 @@ print(ggplot(dataset.week, aes(interval, steps)) +
       xlab("Interval") + ylab("Number of steps") +
       facet_wrap(~week, ncol=1))
 ```
+
+![](figure/weekends.activity-1.png)
